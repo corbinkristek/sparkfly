@@ -1,2 +1,4 @@
-to run first question
+The first answer is located in the folder concurrency
+The second answer is located in the folder s3
+To run first question
 go run main.go
