@@ -10,7 +10,7 @@ import (
 )
 
 /*
-func newYourSolutionrewrite(rc io.ReadCloser) io.Reader {
+func newYourSolution(rc io.ReadCloser) io.Reader {
 	body, err := ioutil.ReadAll(rc)
 	if err != nil {
 		log.Fatal(err)
@@ -29,11 +29,10 @@ func newYourSolutionrewrite(rc io.ReadCloser) io.Reader {
 	return bytes.NewReader(res)
 
 }
-
 */
 
-//I found this question to be difficult to understand.
-//The above comments are from my initial solution i posted to github.
+//I found this question to be difficult to understand and I am still slightly confused.
+//The above comments are from my initial solution I posted to github.
 //2 days ago I came up with the solution below that I think better satisfies the original question.
 type YourSolution interface {
 	io.Reader
