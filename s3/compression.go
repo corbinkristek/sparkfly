@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"compress/gzip"
 	"io"
+	"io/ioutil"
+	"log"
+	"strings"
 )
 
 /*
@@ -27,59 +30,27 @@ func newYourSolutionrewrite(rc io.ReadCloser) io.Reader {
 
 }
 
-func rewrite(rc io.ReadCloser) io.Reader {
-	var p = make([]byte, 1024)
-	_, err := rc.Read(p)
-	if err != nil {
-		return nil
-	}
-	var b bytes.Buffer
-	w := gzip.NewWriter(&b)
-	_, err = w.Write(p)
-	if err != nil {
-		return nil
-	}
-
-	res, err := ioutil.ReadAll(&b)
-	if err != nil {
-		return nil
-	}
-	return bytes.NewReader(res)
-
-}
 */
 
-//This question was genuinly confusing.
+//I found this question to be difficult to understand.
 //The above comments are from my initial solution i posted to github.
-//After I had time to think I came up with the below solution that I think better satisfies the question.
+//2 days ago I came up with the solution below that I think better satisfies the original question.
 type YourSolution interface {
 	io.Reader
 }
 
-type FooReader struct{}
-
-func (f *FooReader) Read(b []byte) (int, error) {
-	var buf bytes.Buffer
-	w := gzip.NewWriter(&buf)
-	err := w.Close()
-	if err != nil {
-		return 0, err
-	}
-	return w.Write(b)
-
-}
-
 func NewYourSolution(rc io.ReadCloser) *YourSolution {
-	var p = make([]byte, 1024*20)
-	_, err := rc.Read(p)
-	if err != nil {
-		return nil
-	}
-	var intf YourSolution
-	_, err = intf.Read(p)
-	if err != nil {
-		return nil
-	}
-	return &intf
+	rc = io.NopCloser(strings.NewReader("this is a test string"))
+	buff1 := new(bytes.Buffer)
+	buff1.ReadFrom(rc)
+	rc.Close()
+	buff2 := new(bytes.Buffer)
+	w := gzip.NewWriter(buff2)
+	w.Write([]byte(buff1.String()))
+	w.Close()
+	res, _ := ioutil.ReadAll(buff2)
+	log.Println(res)
+	var f YourSolution = bytes.NewReader(res)
+	return &f
 
 }
